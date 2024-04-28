@@ -2,8 +2,6 @@ from rouge import Rouge
 from nltk.translate.bleu_score import corpus_bleu
 from nltk.translate.bleu_score import SmoothingFunction
 import numpy as np
-from transformers import AutoTokenizer, AutoModelForQuestionAnswering
-import torch
 
 
 predicted_answers = []
@@ -19,9 +17,9 @@ bleu_score = corpus_bleu([[ref.split()] for ref in predicted_answers], real_answ
 print("BLEU score:", bleu_score)
 
 # Calculate EM
-if predicted_answers == ground_truth_answera:
-    em_score = 1.0
-else:
-    em_score = 0.0
+em_score = 0
+for i in range(0,len(predicted_answers)): 
+    if predicted_answers[i] == real_answers[i]:
+        em_score += 1
 
-print("Exact Match (EM) score:", em_score)
+print("Exact Match (EM) score:", em_score/len(predicted_answers))
