@@ -82,12 +82,12 @@ qa_results = []
 for sample in tqdm(test_qa):
     qa_results.append(inference(sample, task='qa'))
 
-with open(f'resuls/qa_checkpoint-40.json', 'w') as f:
+with open(f'results/qa_checkpoint-40.json', 'w') as f:
     json.dump(qa_results,f)
 
 sum_results = []
 for sample in tqdm(test_sum):
     sum_results.append(inference(sample, task='sum'))
 
-with open(f'resuls/sum_checkpoint-40.json', 'w') as f:
+with open(f'results/sum_checkpoint-40.json', 'w') as f:
     json.dump(qa_results,f)
