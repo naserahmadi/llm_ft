@@ -23,7 +23,7 @@ In this section we explain different parameters that we used for training the mo
 ## fine tuning parameters
 These parameters are general parameters related to the fine tuning of the model. Here we define parameters such as:  
 - ``num_train_epochs``: The total number of training epochs
-- ``per_device_train_batch_size``: The batch size per GPU for training
+- ``per_device_train_batch_size``: The batch size per GPU for training. This size is limited by the gpus that you have. 
 - ``accumulation steps``: The number of gradient accumulation steps before performing a backward pass
 - ``saving strategies`` : Define and limit saving checkpoints
 - ``logging``: Strategies for logging and reporting
@@ -33,7 +33,7 @@ These parameters are general parameters related to the fine tuning of the model.
 ## PEFT parameters
 
 As mentioned before, we use ``PEFT`` for fine tuning the models. Some of the training parameters are related to ``PEFT``. We load the model in `4bit` format for fine tuning. In PEFT configuration we set the following parameters: 
-- `LORA rank (r)` which defines the size of LORA matrices. The bigger this rank, the more parameters we use in fine tuning. 
+- `LORA rank (r)` which defines the size of LORA matrices. The bigger this rank, the more parameters we use in fine tuning. It is recommended to use bigger ranks such as 64, but in our case, we used 8.
 - `LORA ALPHA` which sets the weight of lora parameters when they are merged with original parameters.
 - `TARGET MODULES` which is the most important parameters and gets a list of modules which we want to be updated during the fine tuning. It is recommended to put all linear modules in this list.  
 
