@@ -74,6 +74,9 @@ with open('data/train.json', 'w') as f:
 with open('data/val.json', 'w') as f:
     json.dump(val_qa+val_sum,f)
 
+with open('data/test.json', 'w') as f:
+    json.dump(test_qa+ test_sum,f)
+
 with open('data/test_sum.json', 'w') as f:
     json.dump(test_sum,f)
 
