@@ -72,22 +72,22 @@ def calculate_perplexity(tokenizer, model, dataset):
 
 
 test_qa, test_sum = load_dataset()
-perplexity = calculate_perplexity(tokenizer, model, test_qa)
-print("QA Perplexity:", perplexity)
+# perplexity = calculate_perplexity(tokenizer, model, test_qa)
+# print("QA Perplexity:", perplexity)
 
-perplexity = calculate_perplexity(tokenizer, model, test_sum)
-print("SUM Perplexity:", perplexity)
+# perplexity = calculate_perplexity(tokenizer, model, test_sum)
+# print("SUM Perplexity:", perplexity)
 
 qa_results = []
 for sample in tqdm(test_qa):
-    qa_results.append(sample, task='qa')
+    qa_results.append(inference(sample, task='qa'))
 
 with open(f'resuls/qa_{model_folder}.json', 'w') as f:
     json.dump(qa_results,f)
 
 sum_results = []
 for sample in tqdm(test_sum):
-    sum_results.append(sample, task='sum')
+    sum_results.append(inference(sample, task='sum'))
 
 with open(f'resuls/sum_{model_folder}.json', 'w') as f:
     json.dump(qa_results,f)
