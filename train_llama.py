@@ -6,36 +6,47 @@ from peft import prepare_model_for_kbit_training
 from transformers import TrainingArguments, AutoTokenizer
 from peft import LoraConfig, get_peft_model
 from trl import SFTTrainer
+from accelerate import PartialState
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter()
 
 
-model_id = "NousResearch/Llama-2-7b-chat-hf"
-#model_id = "NousResearch/Meta-Llama-3-8B-Instruct"
+
+#model_id = "NousResearch/Llama-2-7b-chat-hf"
+model_id = "NousResearch/Meta-Llama-3-8B-Instruct"
 
 bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
+        #attn_implementation="flash_attention_2",
         bnb_4bit_quant_type="nf4",
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=torch.bfloat16
     )
 
 args = TrainingArguments(
-    output_dir="llama2-7b-chat-ft",
+    output_dir="llama3-8b-chat-ft",
     num_train_epochs=1,
-    per_device_train_batch_size=12,
+    per_device_train_batch_size=1,
+    per_device_eval_batch_size=1,
     gradient_accumulation_steps=2,
-    logging_steps=4,
+    do_eval=True,
+    evaluation_strategy="steps",
+    eval_steps=100,
+    logging_steps=2,
     save_strategy="steps",
     save_steps= 100,
     save_total_limit=5,
     learning_rate=2e-4,
-    optim="paged_adamw_32bit",
+    optim="paged_adamw_8bit",
     bf16=True,
     fp16=False,
-    tf32=True,
+    tf32=False,
     max_grad_norm=0.3,
     warmup_ratio=0.03,
     lr_scheduler_type="constant",
     disable_tqdm=False,
+    report_to="tensorboard"
+
 )
 
 
@@ -56,16 +67,14 @@ peft_config = LoraConfig(
     task_type="CAUSAL_LM", 
 )
 
-
 def load_model():
     model = AutoModelForCausalLM.from_pretrained(
     model_id,
     quantization_config=bnb_config,
     use_cache=False,
-    device_map="auto",)
-    
+    device_map={"": PartialState().process_index},
+    )
     model = prepare_model_for_kbit_training(model)
-
     return model
 
 
