@@ -13,7 +13,7 @@ writer = SummaryWriter()
 
 
 #model_id = "NousResearch/Llama-2-7b-chat-hf"
-model_id = "NousResearch/Meta-Llama-3-8B-Instruct"
+model_id = "NousResearch/Meta-Llama-3-8B"
 
 bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
@@ -24,7 +24,7 @@ bnb_config = BitsAndBytesConfig(
     )
 
 args = TrainingArguments(
-    output_dir="llama3-8b-chat-ft",
+    output_dir="llama3-8b-ft",
     num_train_epochs=1,
     per_device_train_batch_size=1,
     per_device_eval_batch_size=1,
@@ -43,7 +43,7 @@ args = TrainingArguments(
     tf32=False,
     max_grad_norm=0.3,
     warmup_ratio=0.03,
-    lr_scheduler_type="constant",
+    lr_scheduler_type="linear", #"linear" #cosine
     disable_tqdm=False,
     report_to="tensorboard"
 
@@ -51,8 +51,8 @@ args = TrainingArguments(
 
 
 peft_config = LoraConfig(
-    r=8,
-    lora_alpha=16,
+    r=64,
+    lora_alpha=128,
     lora_dropout=0.05,
     target_modules= [
         'lm_head',
