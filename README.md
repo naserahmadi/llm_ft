@@ -11,7 +11,7 @@ After cloning the repo, follow these steps:
 - ``evaluations.py`` reports **ROUGE**, **BLEU** and **EM** by comparing the predictions and references. 
 - use ``merge_llama.py`` to merge the created adapter with base model.
 
-Current versions, provide two sets of evaluations metrics: 
+Current version, provides two sets of evaluations metrics: 
 - LLM based evaluation metric (**preplexity**)
 - Classic IR evaluation metrics (**ROUGE**, **BLUE**, and **EM**)
 
